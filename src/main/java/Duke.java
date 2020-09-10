@@ -14,8 +14,39 @@ public class Duke {
         }
     }
 
+    public static boolean checkCommand(String[] task) {
+        boolean checkTask = false;
+        boolean checkDescription = false;
+        if (task[0].equals("todo")) {
+            checkTask = true;
+        } else if (task[0].equals("deadline")) {
+            checkTask = true;
+        } else if (task[0].equals("event")) {
+            checkTask = true;
+        }
+
+        if (!checkTask) {
+            System.out.println("     Oops! I'm sorry, but I don't know what that means. :(");
+            return false;
+        }
+
+        if (task.length==2) {
+            checkDescription = true;
+        } else {
+            System.out.println("     Oops! The description of " + task[0] + " cannot be empty.");
+            return false;
+        }
+
+        return checkDescription;
+    }
+
     public static void addTask(String command) {
         String[] task = command.split(" ", 2);
+
+        if (!checkCommand(task)) {
+            return;
+        }
+
         String type = task[0];
         int index = task[1].indexOf("/");
         String description = task[1];
@@ -42,7 +73,7 @@ public class Duke {
 
         System.out.println("      " + tasks[taskCounter]);
         taskCounter++;
-        System.out.println("     Now you have " + taskCounter + (taskCounter==1 ? " task" : " tasks") + " in the list.");
+        System.out.println("     Now you have " + taskCounter + (taskCounter<=1 ? " task" : " tasks") + " in the list.");
     }
 
     public static void main(String[] args) {
