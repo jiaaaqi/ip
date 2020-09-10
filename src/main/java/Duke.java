@@ -26,7 +26,7 @@ public class Duke {
             date = task[1].substring(index+4);
         }
 
-        System.out.println("     Got it. I've added this task: ");
+        System.out.println("     Got it. I've added this task:");
 
         switch(type) {
             case "todo":
@@ -42,7 +42,7 @@ public class Duke {
 
         System.out.println("      " + tasks[taskCounter]);
         taskCounter++;
-        System.out.println("     Now you have " + taskCounter + (taskCounter==1 ? " task" : " tasks") + " in the list. ");
+        System.out.println("     Now you have " + taskCounter + (taskCounter==1 ? " task" : " tasks") + " in the list.");
     }
 
     public static void main(String[] args) {

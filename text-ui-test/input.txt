@@ -1,0 +1,6 @@
+deadline assignment /by tue
+event presentation /on fri
+todo buy bread
+list
+done 1
+bye
