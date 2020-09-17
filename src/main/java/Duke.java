@@ -1,27 +1,24 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Duke {
-    public static Task[] tasks = new Task[100];
-    public static int taskCounter = 0;
+    private static ArrayList<Task> tasks = new ArrayList<>();
+    private static int taskCounter = 0;
 
     public static void printHorizontalLine() {
         System.out.println("    ——————————————————————————————————————————————————");
     }
 
-    public static void printTasks(int taskCounter, Task[] tasks) {
+    public static void printTasks(int taskCounter, ArrayList<Task> tasks) {
         for (int i=0; i<taskCounter; i++) {
-            System.out.println("     " + (i+1) + ". " + tasks[i]);
+            System.out.println("     " + (i+1) + ". " + tasks.get(i));
         }
     }
 
     public static boolean checkCommand(String[] task) {
         boolean checkTask = false;
-        boolean checkDescription = false;
-        if (task[0].equals("todo")) {
-            checkTask = true;
-        } else if (task[0].equals("deadline")) {
-            checkTask = true;
-        } else if (task[0].equals("event")) {
+        boolean checkDescription;
+        if (task[0].equals("todo") || task[0].equals("deadline") || task[0].equals("event")) {
             checkTask = true;
         }
 
@@ -61,18 +58,26 @@ public class Duke {
 
         switch(type) {
             case "todo":
-                tasks[taskCounter] = new Todo(description);
+                tasks.add(new Todo(description));
                 break;
             case "deadline":
-                tasks[taskCounter] = new Deadline(description, date);
+                tasks.add(new Deadline(description, date));
                 break;
             case "event":
-                tasks[taskCounter] = new Event(description, date);
+                tasks.add(new Event(description, date));
                 break;
         }
 
-        System.out.println("      " + tasks[taskCounter]);
+        System.out.println("      " + tasks.get(taskCounter));
         taskCounter++;
+        System.out.println("     Now you have " + taskCounter + (taskCounter<=1 ? " task" : " tasks") + " in the list.");
+    }
+
+    public static void delete(int index) {
+        Task deleted = tasks.remove(index);
+        taskCounter--;
+        System.out.println("     Noted. I've removed this task:");
+        System.out.println("      " + deleted);
         System.out.println("     Now you have " + taskCounter + (taskCounter<=1 ? " task" : " tasks") + " in the list.");
     }
 
@@ -99,7 +104,10 @@ public class Duke {
             } else if (command.contains("done")) {
                 // assume that task index is keyed in last
                 int taskIndex = Integer.parseInt(command.substring(command.length()-1)) - 1;
-                tasks[taskIndex].markAsDone();
+                tasks.get(taskIndex).markAsDone();
+            } else if (command.contains("delete")) {
+                int taskIndex = Integer.parseInt(command.substring(command.length()-1)) - 1;
+                delete(taskIndex);
             } else {
                 addTask(command);
             }
