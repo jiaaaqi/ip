@@ -1,11 +1,3 @@
-package duke;
-
-import duke.task.Deadline;
-import duke.task.Event;
-import duke.task.Task;
-import duke.task.Todo;
-
-import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -89,7 +81,7 @@ public class Duke {
         System.out.println("     Now you have " + taskCounter + (taskCounter<=1 ? " task" : " tasks") + " in the list.");
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         String logo = " ____        _        \n"
                 + "|  _ \\ _   _| | _____ \n"
                 + "| | | | | | | |/ / _ \\\n"
@@ -98,18 +90,9 @@ public class Duke {
         Scanner in = new Scanner(System.in);
 
         System.out.println("Hello from\n" + logo);
-        System.out.println("     Hello! I'm duke.Duke");
+        System.out.println("     Hello! I'm Duke");
         System.out.println("     What can I do for you?");
         printHorizontalLine();
-
-        // read data from file
-        /*
-        File f = new File("./data/duke.txt");
-        try {
-            Scanner data = new Scanner(f);
-        } catch (FileNotFoundException e) {
-            f.createNewFile();
-        }*/
 
         // command loop
         String command = in.nextLine();
