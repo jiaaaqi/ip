@@ -3,4 +3,6 @@ event presentation /on fri
 todo buy bread
 list
 done 1
+delete 2
+list
 bye
