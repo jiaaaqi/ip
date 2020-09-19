@@ -7,17 +7,18 @@ import duke.task.Todo;
 
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Duke {
     private static ArrayList<Task> tasks = new ArrayList<>();
     private static int taskCounter = 0;
-
-    public static void printHorizontalLine() {
-        System.out.println("    ——————————————————————————————————————————————————");
-    }
+    private final String filePath = "../ip/data/duke.txt";
 
     public static void printTasks(int taskCounter, ArrayList<Task> tasks) {
-        for (int i=0; i<taskCounter; i++) {
+        for (int i = 0; i < taskCounter; i++) {
             System.out.println("     " + (i+1) + ". " + tasks.get(i));
         }
     }
@@ -63,21 +64,21 @@ public class Duke {
 
         System.out.println("     Got it. I've added this task:");
 
-        switch(type) {
-            case "todo":
-                tasks.add(new Todo(description));
-                break;
-            case "deadline":
-                tasks.add(new Deadline(description, date));
-                break;
-            case "event":
-                tasks.add(new Event(description, date));
-                break;
+        switch (type) {
+        case "todo":
+            tasks.add(new Todo(description));
+            break;
+        case "deadline":
+            tasks.add(new Deadline(description, date));
+            break;
+        case "event":
+            tasks.add(new Event(description, date));
+            break;
         }
 
         System.out.println("      " + tasks.get(taskCounter));
         taskCounter++;
-        System.out.println("     Now you have " + taskCounter + (taskCounter<=1 ? " task" : " tasks") + " in the list.");
+        printNumOfTasks();
     }
 
     public static void delete(int index) {
@@ -85,21 +86,13 @@ public class Duke {
         taskCounter--;
         System.out.println("     Noted. I've removed this task:");
         System.out.println("      " + deleted);
-        System.out.println("     Now you have " + taskCounter + (taskCounter<=1 ? " task" : " tasks") + " in the list.");
+        printNumOfTasks();
     }
 
     public static void main(String[] args) {
-        String logo = " ____        _        \n"
-                + "|  _ \\ _   _| | _____ \n"
-                + "| | | | | | | |/ / _ \\\n"
-                + "| |_| | |_| |   <  __/\n"
-                + "|____/ \\__,_|_|\\_\\___|\n";
-        Scanner in = new Scanner(System.in);
+        printStartMessage();
 
-        System.out.println("Hello from\n" + logo);
-        System.out.println("     Hello! I'm duke.Duke");
-        System.out.println("     What can I do for you?");
-        printHorizontalLine();
+        Scanner in = new Scanner(System.in);
 
         // command loop
         String command = in.nextLine();
@@ -123,6 +116,30 @@ public class Duke {
             command = in.nextLine();
         }
 
+        printExitMessage();
+    }
+
+    private static void printStartMessage() {
+        String logo = " ____        _        \n"
+                + "|  _ \\ _   _| | _____ \n"
+                + "| | | | | | | |/ / _ \\\n"
+                + "| |_| | |_| |   <  __/\n"
+                + "|____/ \\__,_|_|\\_\\___|\n";
+        System.out.println("Hello from\n" + logo);
+        System.out.println("     Hello! I'm duke.Duke");
+        System.out.println("     What can I do for you?");
+        printHorizontalLine();
+    }
+
+    public static void printHorizontalLine() {
+        System.out.println("    ——————————————————————————————————————————————————");
+    }
+
+    private static void printNumOfTasks() {
+        System.out.println("     Now you have " + taskCounter + (taskCounter <= 1 ? " task" : " tasks") + " in the list.");
+    }
+
+    private static void printExitMessage() {
         printHorizontalLine();
         System.out.println("     Bye. Hope to see you again soon!");
         printHorizontalLine();
