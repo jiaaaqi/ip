@@ -3,14 +3,24 @@ package duke.task;
 public class Task {
     protected String description;
     protected boolean isDone;
+    protected String date;
 
     public Task(String description) {
         this.description = description;
         this.isDone = false;
+        this.date = null;
     }
 
     public String getDescription() {
         return description;
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public String getDate() {
+        return date;
     }
 
     public void markAsDone() {

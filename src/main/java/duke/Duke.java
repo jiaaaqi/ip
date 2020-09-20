@@ -5,23 +5,14 @@ import duke.task.Event;
 import duke.task.Task;
 import duke.task.Todo;
 
+import java.io.*;
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class Duke {
     private static ArrayList<Task> tasks = new ArrayList<>();
     private static int taskCounter = 0;
-    private final String filePath = "../ip/data/duke.txt";
-
-    public static void printTasks(int taskCounter, ArrayList<Task> tasks) {
-        for (int i = 0; i < taskCounter; i++) {
-            System.out.println("     " + (i+1) + ". " + tasks.get(i));
-        }
-    }
+    private static final String filePath = "../ip/data/duke.txt";
 
     public static boolean checkCommand(String[] task) {
         boolean checkTask = false;
@@ -77,6 +68,7 @@ public class Duke {
         }
 
         System.out.println("      " + tasks.get(taskCounter));
+        updateSavedData(tasks.get(taskCounter));
         taskCounter++;
         printNumOfTasks();
     }
@@ -87,11 +79,141 @@ public class Duke {
         System.out.println("     Noted. I've removed this task:");
         System.out.println("      " + deleted);
         printNumOfTasks();
+
+        // remove from file
+        String lineToDelete = getSavedLine(deleted);
+        try {
+            editFile(lineToDelete, "delete" ,deleted);
+        } catch (IOException e) {
+            System.out.println("Unable to edit file: " +e.getMessage());
+        }
+    }
+
+    public static void done(int index) {
+        Task taskDone = tasks.get(index);
+        String originalLine = getSavedLine(taskDone);
+        taskDone.markAsDone();
+        try {
+            editFile(originalLine, "done", taskDone);
+        } catch (IOException e) {
+            System.out.println("Unable to edit file: " +e.getMessage());
+        }
+    }
+
+    public static void editFile(String line, String action, Task task) throws IOException{
+        File originalFile = new File(filePath);
+        Scanner s = new Scanner(originalFile);
+
+        createFile("../ip/data/temp.txt");
+        File tempFile = new File("../ip/data/temp.txt");
+        FileWriter writer = new FileWriter(tempFile, true);
+
+        while (s.hasNext()) {
+            String input = s.nextLine();
+            // scan the file for the task line and edit accordingly
+            if (input.equals(line)) {
+                if (action.equals("delete")) {
+                    // skip this line
+                } else if (action.equals("done")) {
+                    writer.write(getSavedLine(task) + "\n");
+                }
+            } else {
+                // else just copy line into temp file
+                writer.write(input + "\n");
+            }
+        }
+        writer.close();
+
+        // delete original file and rename temp file to be original file
+        if (!originalFile.delete()) {
+            System.out.println("Cannot delete original");
+        }
+        if (!tempFile.renameTo(originalFile)) {
+            System.out.println("Cannot rename temp file");
+        }
+    }
+
+    public static String getSavedLine(Task task) {
+        String[] name = task.toString().split(" ", 2);
+        String done = task.isDone() ? "1" : "0";
+        String line = null;
+        if (name[0].contains("T")) {
+            line = "T/" + done + "/" + task.getDescription();
+        } else if (name[0].contains("D")) {
+            line = "D/" + done + "/" + task.getDescription() + "/" + task.getDate();
+        } else if (name[0].contains("E")) {
+            line = "E/" + done + "/" + task.getDescription() + "/" + task.getDate();
+        }
+        return line;
+    }
+
+    public static void readFileContent() throws FileNotFoundException{
+        File f = new File(filePath);
+        Scanner s = new Scanner(f);
+        ArrayList<String> taskList = new ArrayList<>();
+
+        while (s.hasNext()) {
+            taskList.add(s.nextLine());
+        }
+
+        for (String task : taskList) {
+            addTaskFromFile(task);
+            taskCounter++;
+        }
+    }
+
+    public static void addTaskFromFile(String saved) {
+        // Array Index -> 0: type, 1: description, 2: date
+        String[] task = saved.split("/", 4);
+        switch (task[0]) {
+            case "T":
+                tasks.add(new Todo(task[2]));
+                break;
+            case "D":
+                tasks.add(new Deadline(task[2], task[3]));
+                break;
+            case "E":
+                tasks.add(new Event(task[2], task[3]));
+        }
+
+        int done = Integer.parseInt(task[1]);
+        if (done==1) {
+            tasks.get(taskCounter).markAsDone();
+        }
+
+        System.out.println("added: " + task[2]);
+    }
+
+    public static void createFile(String fileName) {
+        File f = new File(fileName);
+        try {
+            if (f.createNewFile()) {
+                // System.out.println("File created: " + f.getName());
+            }
+        } catch (IOException e) {
+            System.out.println("cannot create file: " + e.getMessage());
+        }
+    }
+
+    public static void updateSavedData(Task task) {
+        String savedData = getSavedLine(task);
+        // System.out.println("saved line: " + savedData);
+        try {
+            FileWriter fw = new FileWriter(filePath, true);
+            fw.write(savedData + "\n");
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Error updating saved data: " + e.getMessage());
+        }
     }
 
     public static void main(String[] args) {
         printStartMessage();
-
+        try {
+            readFileContent();
+        } catch (FileNotFoundException e) {
+            createFile(filePath);
+        }
         Scanner in = new Scanner(System.in);
 
         // command loop
@@ -100,11 +222,11 @@ public class Duke {
             printHorizontalLine();
 
             if (command.equals("list")) {
-                printTasks(taskCounter, tasks);
+                printTasks();
             } else if (command.contains("done")) {
                 // assume that task index is keyed in last
                 int taskIndex = Integer.parseInt(command.substring(command.length()-1)) - 1;
-                tasks.get(taskIndex).markAsDone();
+                done(taskIndex);
             } else if (command.contains("delete")) {
                 int taskIndex = Integer.parseInt(command.substring(command.length()-1)) - 1;
                 delete(taskIndex);
@@ -137,6 +259,12 @@ public class Duke {
 
     private static void printNumOfTasks() {
         System.out.println("     Now you have " + taskCounter + (taskCounter <= 1 ? " task" : " tasks") + " in the list.");
+    }
+
+    public static void printTasks() {
+        for (int i = 0; i < taskCounter; i++) {
+            System.out.println("     " + (i+1) + ". " + tasks.get(i));
+        }
     }
 
     private static void printExitMessage() {
