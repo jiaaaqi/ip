@@ -14,6 +14,40 @@ public class Duke {
     private static int taskCounter = 0;
     private static final String filePath = "../ip/data/duke.txt";
 
+    public static void main(String[] args) {
+        printStartMessage();
+        try {
+            readFileContent();
+        } catch (FileNotFoundException e) {
+            createFile(filePath);
+        }
+        Scanner in = new Scanner(System.in);
+
+        // command loop
+        String command = in.nextLine();
+        while (!command.equals("bye")) {
+            printHorizontalLine();
+
+            if (command.equals("list")) {
+                printTasks();
+            } else if (command.contains("done")) {
+                // assume that task index is keyed in last
+                int taskIndex = Integer.parseInt(command.substring(command.length()-1)) - 1;
+                done(taskIndex);
+            } else if (command.contains("delete")) {
+                int taskIndex = Integer.parseInt(command.substring(command.length()-1)) - 1;
+                delete(taskIndex);
+            } else {
+                addTask(command);
+            }
+
+            printHorizontalLine();
+            command = in.nextLine();
+        }
+
+        printExitMessage();
+    }
+
     public static boolean checkCommand(String[] task) {
         boolean checkTask = false;
         boolean checkDescription;
@@ -81,7 +115,7 @@ public class Duke {
         printNumOfTasks();
 
         // remove from file
-        String lineToDelete = getSavedLine(deleted);
+        String lineToDelete = deleted.getSavedLine();
         try {
             editFile(lineToDelete, "delete" ,deleted);
         } catch (IOException e) {
@@ -91,7 +125,7 @@ public class Duke {
 
     public static void done(int index) {
         Task taskDone = tasks.get(index);
-        String originalLine = getSavedLine(taskDone);
+        String originalLine = taskDone.getSavedLine();
         taskDone.markAsDone();
         try {
             editFile(originalLine, "done", taskDone);
@@ -115,7 +149,7 @@ public class Duke {
                 if (action.equals("delete")) {
                     // skip this line
                 } else if (action.equals("done")) {
-                    writer.write(getSavedLine(task) + "\n");
+                    writer.write(task.getSavedLine() + "\n");
                 }
             } else {
                 // else just copy line into temp file
@@ -131,20 +165,6 @@ public class Duke {
         if (!tempFile.renameTo(originalFile)) {
             System.out.println("Cannot rename temp file");
         }
-    }
-
-    public static String getSavedLine(Task task) {
-        String[] name = task.toString().split(" ", 2);
-        String done = task.isDone() ? "1" : "0";
-        String line = null;
-        if (name[0].contains("T")) {
-            line = "T/" + done + "/" + task.getDescription();
-        } else if (name[0].contains("D")) {
-            line = "D/" + done + "/" + task.getDescription() + "/" + task.getDate();
-        } else if (name[0].contains("E")) {
-            line = "E/" + done + "/" + task.getDescription() + "/" + task.getDate();
-        }
-        return line;
     }
 
     public static void readFileContent() throws FileNotFoundException{
@@ -196,7 +216,7 @@ public class Duke {
     }
 
     public static void updateSavedData(Task task) {
-        String savedData = getSavedLine(task);
+        String savedData = task.getSavedLine();
         // System.out.println("saved line: " + savedData);
         try {
             FileWriter fw = new FileWriter(filePath, true);
@@ -205,40 +225,6 @@ public class Duke {
         } catch (IOException e) {
             System.out.println("Error updating saved data: " + e.getMessage());
         }
-    }
-
-    public static void main(String[] args) {
-        printStartMessage();
-        try {
-            readFileContent();
-        } catch (FileNotFoundException e) {
-            createFile(filePath);
-        }
-        Scanner in = new Scanner(System.in);
-
-        // command loop
-        String command = in.nextLine();
-        while (!command.equals("bye")) {
-            printHorizontalLine();
-
-            if (command.equals("list")) {
-                printTasks();
-            } else if (command.contains("done")) {
-                // assume that task index is keyed in last
-                int taskIndex = Integer.parseInt(command.substring(command.length()-1)) - 1;
-                done(taskIndex);
-            } else if (command.contains("delete")) {
-                int taskIndex = Integer.parseInt(command.substring(command.length()-1)) - 1;
-                delete(taskIndex);
-            } else {
-                addTask(command);
-            }
-
-            printHorizontalLine();
-            command = in.nextLine();
-        }
-
-        printExitMessage();
     }
 
     private static void printStartMessage() {

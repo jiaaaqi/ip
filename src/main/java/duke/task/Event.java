@@ -10,4 +10,9 @@ public class Event extends Task {
     public String toString() {
         return "[E]" + super.toString() + " (on: " + date + ")";
     }
+
+    @Override
+    public String getSavedLine() {
+        return "E/" + description + "/" + date;
+    }
 }
