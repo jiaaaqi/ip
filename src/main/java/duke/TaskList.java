@@ -29,10 +29,10 @@ public class TaskList {
             tasks.add(new Todo(task.getDescription()));
             break;
         case "D":
-            tasks.add(new Deadline(task.getDescription(), task.getDate()));
+            tasks.add(new Deadline(task.getDescription(), String.valueOf(task.getDate())));
             break;
         case "E":
-            tasks.add(new Event(task.getDescription(), task.getDate()));
+            tasks.add(new Event(task.getDescription(), String.valueOf(task.getDate())));
             break;
         }
 
@@ -63,7 +63,7 @@ public class TaskList {
         String originalLine = taskDone.getSavedLine();
         taskDone.markAsDone();
         System.out.println("     Nice! I've marked this task as done:");
-        System.out.println("      " + toString());
+        System.out.println("      " + taskDone.toString());
         try {
             storage.editFile(originalLine, "done", taskDone);
         } catch (IOException e) {
