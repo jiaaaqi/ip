@@ -34,6 +34,9 @@ public class Duke {
             case "list":
                 taskList.printTasks();
                 break;
+            case "find":
+                taskList.find(parser.extractKeywordsFromCommand());
+                break;
             case "done":
                 int taskIndex = Integer.parseInt(command.substring(command.length()-1)) - 1;
                 taskList.markTaskAsDone(taskIndex);

@@ -71,6 +71,26 @@ public class TaskList {
         }
     }
 
+    protected void find(String keywords) {
+        ArrayList<Integer> matchingTasks = new ArrayList<Integer>();
+        for (Task task : tasks) {
+            String description = task.getDescription();
+            if (description.contains(keywords)) {
+                matchingTasks.add(tasks.indexOf(task));
+            }
+        }
+
+        if (matchingTasks.size()==0) {
+            System.out.println(ui.indentation() + " Sorry, there are no matching tasks.");
+            return;
+        }
+
+        System.out.println(ui.indentation() + " Here are the matching tasks in your list:");
+        for (int i : matchingTasks) {
+            System.out.println(ui.indentation() + " " + (i+1) + "." + tasks.get(i));
+        }
+    }
+
     public void printNumOfTasks() {
         System.out.println(ui.indentation() + " Now you have " + taskCounter + (taskCounter <= 1 ? " task" : " tasks") + " in the list.");
     }
