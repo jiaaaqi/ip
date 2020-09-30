@@ -13,6 +13,7 @@ public class Deadline extends Task {
 
     @Override
     public String getSavedLine() {
-        return "D/" + description + "/" + date;
+        String done = isDone ? "1" : "0";
+        return "D/" + done + "/" + description + "/" + date;
     }
 }

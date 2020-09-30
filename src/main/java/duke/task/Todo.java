@@ -12,6 +12,7 @@ public class Todo extends Task {
 
     @Override
     public String getSavedLine() {
-        return "T/" + description;
+        String done = isDone ? "1" : "0";
+        return "T/" + done + "/" + description;
     }
 }

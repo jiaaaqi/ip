@@ -13,6 +13,7 @@ public class Event extends Task {
 
     @Override
     public String getSavedLine() {
-        return "E/" + description + "/" + date;
+        String done = isDone ? "1" : "0";
+        return "E/" + done + "/" + description + "/" + date;
     }
 }
