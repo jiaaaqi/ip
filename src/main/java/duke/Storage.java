@@ -24,6 +24,12 @@ public class Storage {
         return taskCounter;
     }
 
+    /**
+     * This method creates a new file with the given file path.
+     * An IO exception error is thrown in the method, in case the file cannot be created.
+     *
+     * @param filePath  file path of where the file is supposed to be created
+     */
     public void createFile(String filePath) {
         File f = new File(filePath);
         try {
@@ -35,6 +41,14 @@ public class Storage {
         }
     }
 
+    /**
+     * This method reads the duke text file present in ip/data,
+     * and it loads data from the file into a Task ArrayList.
+     * Returns the collected data in the ArrayList.
+     *
+     * @return tasks an ArrayList of tasks recorded in the data file
+     * @throws FileNotFoundException If the file to be read from cannot be found
+     */
     public ArrayList<Task> load() throws FileNotFoundException {
         ArrayList<Task> tasks = new ArrayList<>();
         File f = new File(filePath);
@@ -71,6 +85,18 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * This method makes the necessary edits to the duke text file
+     * whenever a task is marked as done or is deleted from the task list.
+     * To do this, it creates a temporary file and loop through the
+     * original file to find the line that needs to be edited.
+     * Then it will replace the original file with the temporary file.
+     *
+     * @param line Previous version of task that is saved in the file
+     * @param action Changes that is made to the task (deleted or done)
+     * @param task Task that is changed
+     * @throws IOException if the function is unable to scan the original file
+     */
     public void editFile(String line, String action, Task task) throws IOException {
         File originalFile = new File(filePath);
         Scanner s = new Scanner(originalFile);
@@ -104,6 +130,11 @@ public class Storage {
         }
     }
 
+    /**
+     * This method adds a line to the duke text file whenever a new task is added
+     *
+     * @param task New task that is added
+     */
     public void updateSavedData(Task task) {
         String savedData = task.getSavedLine();
         // System.out.println("saved line: " + savedData);
