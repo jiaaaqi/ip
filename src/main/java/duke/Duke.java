@@ -1,10 +1,13 @@
 package duke;
 
+import duke.task.Task;
+
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Duke {
-    private static final String filePath = "data/duke.txt";
+    private static final String filePath = "duke.txt";
     protected static Ui ui = new Ui();
     protected static TaskList taskList;
     protected static Storage storage = new Storage(filePath);
@@ -26,6 +29,7 @@ public class Duke {
             taskList = new TaskList(storage.load(), storage.getTaskCounter());
         } catch (FileNotFoundException e) {
             storage.createFile(filePath);
+            taskList = new TaskList(new ArrayList<Task>(), storage.getTaskCounter());
         }
         Scanner in = new Scanner(System.in);
 

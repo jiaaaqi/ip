@@ -163,6 +163,7 @@ Exits the program.
 
 ## Things to Note
 * __Date__ for events and deadlines must be in the format YYYY-MM-DD. 
+* `duke.txt` file that stores saved data will be created in the upper directory. Please do not change its location.
 
 ## Command Summary 
 Action | Format

@@ -19,10 +19,11 @@ import java.util.Scanner;
  */
 public class Storage {
     private final String filePath;
-    private int taskCounter = 0;
+    private int taskCounter;
 
     public Storage(String filePath) {
         this.filePath = filePath;
+        this.taskCounter = 0;
     }
 
     public int getTaskCounter() {
@@ -106,8 +107,8 @@ public class Storage {
         File originalFile = new File(filePath);
         Scanner s = new Scanner(originalFile);
 
-        createFile("../ip/data/temp.txt");
-        File tempFile = new File("../ip/data/temp.txt");
+        createFile("temp.txt");
+        File tempFile = new File("temp.txt");
         FileWriter writer = new FileWriter(tempFile, true);
 
         while (s.hasNext()) {
