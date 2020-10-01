@@ -12,6 +12,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * This class handles saving data to file whenever the current task list is edited.
+ * It also read any data that is previously saved and adds them to the task list at the start of the program.
+ * If there is no data file, it will create one.
+ */
 public class Storage {
     private final String filePath;
     private int taskCounter = 0;

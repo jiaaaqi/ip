@@ -11,6 +11,10 @@ import static duke.Duke.ui;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * This class holds the ArrayList of task and the actions that can be done on it.
+ * It will also call methods that edit data in the text file when actions are called.
+ */
 public class TaskList {
     protected ArrayList<Task> tasks;
     protected int taskCounter;

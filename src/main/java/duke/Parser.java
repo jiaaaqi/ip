@@ -5,6 +5,11 @@ import duke.task.Event;
 import duke.task.Task;
 import duke.task.Todo;
 
+/**
+ * This class will handle user commands.
+ * Handling includes check if the command is valid, returning the type of command,
+ * and also extracting the data from commands to return to the run method in Duke.java.
+ */
 public class Parser {
     private String command;
 

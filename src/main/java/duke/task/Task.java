@@ -1,5 +1,10 @@
 package duke.task;
 
+/**
+ * This class represents the tasks that is to be recorded in the scheduler.
+ * The subclasses of this class includes Todo, Deadline, and Event.
+ * The subclasses represents the different types of tasks which the program can record.
+ */
 public class Task {
     protected String description;
     protected boolean isDone;
@@ -49,6 +54,7 @@ public class Task {
 
     /**
      * This method is used in the subclasses. It will return the line that is to be saved to the duke text file.
+     *
      * @return savedLine line to be saved into text file
      */
     public String getSavedLine() {

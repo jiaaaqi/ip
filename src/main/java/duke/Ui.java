@@ -1,5 +1,9 @@
 package duke;
 
+/**
+ * This class represents the user interface.
+ * It holds methods that prints messages and dividers to the user.
+ */
 public class Ui {
     public Ui() {
     }
