@@ -93,7 +93,7 @@ public class TaskList {
     }
 
     protected void find(String keywords) {
-        ArrayList<Integer> matchingTasks = new ArrayList<Integer>();
+        ArrayList<Integer> matchingTasks = new ArrayList<>();
         for (Task task : tasks) {
             String description = task.getDescription();
             if (description.contains(keywords)) {
@@ -124,8 +124,11 @@ public class TaskList {
      * This method prints the tasks in a list form when "list" is called by the user.
      */
     public void printTasks() {
+        if (taskCounter == 0) {
+            System.out.println(ui.indentation() + " There is no task in the list yet.");
+        }
         for (int i = 0; i < taskCounter; i++) {
-            System.out.println("     " + (i+1) + ". " + tasks.get(i));
+            System.out.println(ui.indentation() + " " + (i+1) + ". " + tasks.get(i));
         }
     }
 }
