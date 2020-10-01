@@ -83,6 +83,11 @@ public class Parser {
         return task;
     }
 
+    public String extractKeywordsFromCommand() {
+        String[] keywords = command.split(" ", 2);
+        return keywords[1];
+    }
+
     public String verifyCommand() {
         if (command.equals("list")) {
             return command;
@@ -92,6 +97,8 @@ public class Parser {
             return "done";
         } else if (command.contains("delete")) {
             return "delete";
+        } else if (command.contains("find")) {
+            return "find";
         } else {
             return "invalid";
         }
