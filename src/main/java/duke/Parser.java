@@ -5,6 +5,11 @@ import duke.task.Event;
 import duke.task.Task;
 import duke.task.Todo;
 
+/**
+ * This class will handle user commands.
+ * Handling includes check if the command is valid, returning the type of command,
+ * and also extracting the data from commands to return to the run method in Duke.java.
+ */
 public class Parser {
     private String command;
 
@@ -12,14 +17,21 @@ public class Parser {
         this.command = command;
     }
 
-    public String getCommand() {
-        return command;
-    }
-
     public void setCommand(String command) {
         this.command = command;
     }
 
+    /**
+     * This method checks if the task command has all the required parameters.
+     * If the task is a todo task, only description is required.
+     * The method will return a checkDescription flag.
+     * If the task is a deadline or event, both description and date is required.
+     * If the deadline or event does not have description, the method will return false immediately,
+     * and would not go on to check the presence of a date.
+     *
+     * @param task Array of strings that has been split into type, description and date
+     * @return checkDate flag to check if it has a date
+     */
     private boolean checkTaskInputCommand(String[] task) {
         boolean checkDescription;
         boolean checkDate;
@@ -45,6 +57,13 @@ public class Parser {
         return checkDate;
     }
 
+    /**
+     * This method splits the given task command into type of task, description and date
+     * It also checks if the command has all the requirements to create a task, and creates the task.
+     * If it does not meet the requirements, a null task will be returned.
+     *
+     * @return task task that is created
+     */
     public Task extractTaskFromCommand() {
         String[] taskArray = command.split(" ", 2);
         String type = taskArray[0];
@@ -88,6 +107,13 @@ public class Parser {
         return keywords[1];
     }
 
+
+    /**
+     * This method checks if the input command is valid and returns the type of command as a string.
+     * If invalid, "invalid" will be returned instead.
+     *
+     * @return typeOfCommand type of command
+     */
     public String verifyCommand() {
         if (command.equals("list")) {
             return command;

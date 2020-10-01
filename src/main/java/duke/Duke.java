@@ -15,6 +15,12 @@ public class Duke {
         ui.printExitMessage();
     }
 
+    /**
+     * This method reads user inputs as commands and executes them accordingly.
+     * It starts off by scanning for a duke text file to check for any saved data.
+     * Then it will go into a command loop of waiting for the next command and executing it.
+     * To exit the loop, the user would have to type "bye".
+     */
     private static void run() {
         try {
             taskList = new TaskList(storage.load(), storage.getTaskCounter());
