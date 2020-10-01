@@ -34,7 +34,17 @@ public class Duke {
         Parser parser = new Parser(command);
         while (!command.equals("bye")) {
             ui.printDivider();
-            String typeOfCommand = parser.verifyCommand();
+            String typeOfCommand = null;
+            try {
+                typeOfCommand = parser.verifyCommand();
+            } catch (DukeException e) {
+                System.out.println("     Oops! I'm sorry, but I don't know what that means. " +
+                        "Please refer to user guide if you need any help.");
+                ui.printDivider();
+                command = in.nextLine();
+                parser.setCommand(command);
+                continue;
+            }
 
             switch(typeOfCommand) {
             case "list":
@@ -56,9 +66,6 @@ public class Duke {
                     taskList.addTask(parser.extractTaskFromCommand());
                 }
                 break;
-            default:
-                System.out.println("     Oops! I'm sorry, but I don't know what that means. " +
-                        "Please refer to user guide if you need any help.");
             }
 
             ui.printDivider();

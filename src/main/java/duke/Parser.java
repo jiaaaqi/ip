@@ -5,6 +5,8 @@ import duke.task.Event;
 import duke.task.Task;
 import duke.task.Todo;
 
+import java.time.format.DateTimeParseException;
+
 /**
  * This class will handle user commands.
  * Handling includes check if the command is valid, returning the type of command,
@@ -22,39 +24,44 @@ public class Parser {
     }
 
     /**
-     * This method checks if the task command has all the required parameters.
-     * If the task is a todo task, only description is required.
-     * The method will return a checkDescription flag.
-     * If the task is a deadline or event, both description and date is required.
-     * If the deadline or event does not have description, the method will return false immediately,
-     * and would not go on to check the presence of a date.
+     * This method checks if a task command has a task description.
      *
-     * @param task Array of strings that has been split into type, description and date
-     * @return checkDate flag to check if it has a date
+     * @param command command string to be checked
+     * @return taskArray string array which splits the type of task and its description
+     * @throws DukeException if the description is not found
      */
-    private boolean checkTaskInputCommand(String[] task) {
-        boolean checkDescription;
-        boolean checkDate;
-
-        if (task.length>=2) {
-            checkDescription = true;
-        } else {
-            System.out.println("     Oops! The description of " + task[0] + " cannot be empty. :(");
-            return false;
+    private String[] checkTaskDescription(String command) throws DukeException {
+        String[] taskArray = command.split(" ", 2);
+        if (taskArray.length<2 || taskArray[1]==null) {
+            throw new DukeException();
         }
+        taskArray[0] = taskArray[0].toLowerCase();
+        return taskArray;
+    }
 
-        if (task[0].equals("event") || task[0].contains("deadline")) {
-            if (task[2] != null) {
-                checkDate = true;
-            } else {
-                System.out.println("     Oops! The date of " + task[0] + " cannot be empty!!!");
-                checkDate = false;
+    /**
+     * This method checks if the date for the task is present for deadlines and events.
+     *
+     * @param taskArray string array that stores task's type and whatever is behind
+     * @return taskArrayWithDate string array that stores the task's type, description and date
+     * @throws DukeException if date is not found for deadlines and events
+     */
+    private String[] checkTaskDate(String[] taskArray) throws DukeException {
+        String[] newTaskArray = new String[3];
+        newTaskArray[0] = taskArray[0];
+        if (newTaskArray[0].equals("todo")) {
+            return taskArray;
+        } else {
+            if (taskArray[0].equals("deadline") && !taskArray[1].contains("/by")) {
+                throw new DukeException();
+            } else if (taskArray[0].equals("event") && !taskArray[1].contains("/on")) {
+                throw new DukeException();
             }
-        } else {
-            return checkDescription;
+            int index = taskArray[1].indexOf("/");
+            newTaskArray[1] = taskArray[1].substring(0, index-1);
+            newTaskArray[2] = taskArray[1].substring(index+4);
         }
-
-        return checkDate;
+        return newTaskArray;
     }
 
     /**
@@ -65,35 +72,41 @@ public class Parser {
      * @return task task that is created
      */
     public Task extractTaskFromCommand() {
-        String[] taskArray = command.split(" ", 2);
-        String type = taskArray[0];
-        int index = taskArray[1].indexOf("/");
-        String description = taskArray[1];
-        String date = null;
-
-        if (index != -1) {
-            description = taskArray[1].substring(0, index-1);
-            date = taskArray[1].substring(index+4);
+        String[] taskArray = new String[2];
+        try {
+            taskArray = checkTaskDescription(command);
+        } catch (DukeException e) {
+            System.out.println("     Oops! The description of " + taskArray[0] + " cannot be empty. :(");
+            return null;
         }
-        String[] newTaskArray = new String[3];
-        newTaskArray[0] = type;
-        newTaskArray[1] = description;
-        newTaskArray[2] = date;
-
-        if (!checkTaskInputCommand(newTaskArray)) {
+        String[] taskArrayWithDate = new String[3];
+        try {
+            taskArrayWithDate = checkTaskDate(taskArray);
+        } catch (DukeException e) {
+            System.out.println("     Oops! The date of " + taskArray[0] + " cannot be empty!!!");
             return null;
         }
 
         Task task;
-        switch (type) {
+        switch (taskArrayWithDate[0]) {
         case "todo":
-            task = new Todo(description);
+            task = new Todo(taskArrayWithDate[1]);
             break;
         case "deadline":
-            task = new Deadline(description, date);
+            try {
+                task = new Deadline(taskArrayWithDate[1], taskArrayWithDate[2]);
+            } catch (DateTimeParseException e) {
+                System.out.println("     Please input the date in the format: YYYY-MM-DD.");
+                return null;
+            }
             break;
         case "event":
-            task = new Event(description, date);
+            try {
+                task = new Event(taskArrayWithDate[1], taskArrayWithDate[2]);
+            } catch (DateTimeParseException e) {
+                System.out.println("     Please input the date in the format: YYYY-MM-DD.");
+                return null;
+            }
             break;
         default:
             task = null;
@@ -114,7 +127,7 @@ public class Parser {
      *
      * @return typeOfCommand type of command
      */
-    public String verifyCommand() {
+    public String verifyCommand() throws DukeException {
         if (command.equals("list")) {
             return command;
         } else if (command.contains("todo") || command.contains("event") || command.contains("deadline")) {
@@ -126,7 +139,7 @@ public class Parser {
         } else if (command.contains("find")) {
             return "find";
         } else {
-            return "invalid";
+            throw new DukeException();
         }
     }
 }
