@@ -34,7 +34,7 @@ public class Ui {
                 + "| |_| | |_| |   <  __/\n"
                 + "|____/ \\__,_|_|\\_\\___|\n";
         System.out.println("Hello from\n" + logo);
-        System.out.println(indentation() + " Hello! I'm duke.Duke");
+        System.out.println(indentation() + " Hello! I'm Duke.");
         System.out.println(indentation() + " What can I do for you?");
         printDivider();
     }
