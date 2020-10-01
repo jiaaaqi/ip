@@ -40,6 +40,9 @@ public class Duke {
             case "list":
                 taskList.printTasks();
                 break;
+            case "find":
+                taskList.find(parser.extractKeywordsFromCommand());
+                break;
             case "done":
                 int taskIndex = Integer.parseInt(command.substring(command.length()-1)) - 1;
                 taskList.markTaskAsDone(taskIndex);
@@ -49,11 +52,13 @@ public class Duke {
                 taskList.deleteTask(taskIndex);
                 break;
             case "task":
-                taskList.addTask(parser.extractTaskFromCommand());
+                if (parser.extractTaskFromCommand() != null) {
+                    taskList.addTask(parser.extractTaskFromCommand());
+                }
                 break;
             default:
                 System.out.println("     Oops! I'm sorry, but I don't know what that means. " +
-                        "Please refer to user guide for help.");
+                        "Please refer to user guide if you need any help.");
             }
 
             ui.printDivider();

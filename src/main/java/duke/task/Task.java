@@ -1,5 +1,8 @@
 package duke.task;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 /**
  * This class represents the tasks that is to be recorded in the scheduler.
  * The subclasses of this class includes Todo, Deadline, and Event.
@@ -8,7 +11,7 @@ package duke.task;
 public class Task {
     protected String description;
     protected boolean isDone;
-    protected String date;
+    protected LocalDate date;
 
     public Task(String description) {
         this.description = description;
@@ -24,8 +27,12 @@ public class Task {
         return isDone;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
+    }
+
+    public String printDate() {
+        return date.format(DateTimeFormatter.ofPattern("MMM dd yyyy"));
     }
 
     public void markAsDone() {

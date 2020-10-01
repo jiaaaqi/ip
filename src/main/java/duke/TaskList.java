@@ -39,10 +39,10 @@ public class TaskList {
             tasks.add(new Todo(task.getDescription()));
             break;
         case "D":
-            tasks.add(new Deadline(task.getDescription(), task.getDate()));
+            tasks.add(new Deadline(task.getDescription(), String.valueOf(task.getDate())));
             break;
         case "E":
-            tasks.add(new Event(task.getDescription(), task.getDate()));
+            tasks.add(new Event(task.getDescription(), String.valueOf(task.getDate())));
             break;
         }
 
@@ -84,13 +84,34 @@ public class TaskList {
         String originalLine = taskDone.getSavedLine();
         taskDone.markAsDone();
         System.out.println("     Nice! I've marked this task as done:");
-        System.out.println("      " + toString());
+        System.out.println("      " + taskDone.toString());
         try {
             storage.editFile(originalLine, "done", taskDone);
         } catch (IOException e) {
             System.out.println("Unable to edit file: " +e.getMessage());
         }
     }
+
+    protected void find(String keywords) {
+        ArrayList<Integer> matchingTasks = new ArrayList<Integer>();
+        for (Task task : tasks) {
+            String description = task.getDescription();
+            if (description.contains(keywords)) {
+                matchingTasks.add(tasks.indexOf(task));
+            }
+        }
+
+        if (matchingTasks.size()==0) {
+            System.out.println(ui.indentation() + " Sorry, there are no matching tasks.");
+            return;
+        }
+
+        System.out.println(ui.indentation() + " Here are the matching tasks in your list:");
+        for (int i : matchingTasks) {
+            System.out.println(ui.indentation() + " " + (i+1) + "." + tasks.get(i));
+        }
+    }
+
 
     /**
      * This method prints the number of tasks in the task list as a statement for reference.

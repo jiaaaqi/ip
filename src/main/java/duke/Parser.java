@@ -102,6 +102,12 @@ public class Parser {
         return task;
     }
 
+    public String extractKeywordsFromCommand() {
+        String[] keywords = command.split(" ", 2);
+        return keywords[1];
+    }
+
+
     /**
      * This method checks if the input command is valid and returns the type of command as a string.
      * If invalid, "invalid" will be returned instead.
@@ -117,6 +123,8 @@ public class Parser {
             return "done";
         } else if (command.contains("delete")) {
             return "delete";
+        } else if (command.contains("find")) {
+            return "find";
         } else {
             return "invalid";
         }
