@@ -31,6 +31,7 @@ public class Parser {
      * @throws DukeException if the description is not found
      */
     private String[] checkTaskDescription(String command) throws DukeException {
+        // taskArray: 0->type of task, 1->description and date if applicable
         String[] taskArray = command.split(" ", 2);
         if (taskArray.length<2 || taskArray[1]==null) {
             throw new DukeException();
@@ -47,6 +48,7 @@ public class Parser {
      * @throws DukeException if date is not found for deadlines and events
      */
     private String[] checkTaskDate(String[] taskArray) throws DukeException {
+        // newTaskArray: 0 -> type of task, 1 -> description, 2 -> date if applicable
         String[] newTaskArray = new String[3];
         newTaskArray[0] = taskArray[0];
         if (newTaskArray[0].equals("todo")) {
@@ -79,7 +81,7 @@ public class Parser {
             System.out.println("     Oops! The description of " + taskArray[0] + " cannot be empty. :(");
             return null;
         }
-        String[] taskArrayWithDate = new String[3];
+        String[] taskArrayWithDate;
         try {
             taskArrayWithDate = checkTaskDate(taskArray);
         } catch (DukeException e) {

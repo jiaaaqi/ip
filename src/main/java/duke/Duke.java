@@ -34,7 +34,8 @@ public class Duke {
         Parser parser = new Parser(command);
         while (!command.equals("bye")) {
             ui.printDivider();
-            String typeOfCommand = null;
+            String typeOfCommand;
+
             try {
                 typeOfCommand = parser.verifyCommand();
             } catch (DukeException e) {

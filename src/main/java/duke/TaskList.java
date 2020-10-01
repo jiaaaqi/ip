@@ -93,7 +93,7 @@ public class TaskList {
     }
 
     protected void find(String keywords) {
-        ArrayList<Integer> matchingTasks = new ArrayList<Integer>();
+        ArrayList<Integer> matchingTasks = new ArrayList<>();
         for (Task task : tasks) {
             String description = task.getDescription();
             if (description.contains(keywords)) {
