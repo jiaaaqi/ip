@@ -40,7 +40,7 @@ public class Duke {
                 typeOfCommand = parser.verifyCommand();
             } catch (DukeException e) {
                 System.out.println("     Oops! I'm sorry, but I don't know what that means. " +
-                        "Please refer to user guide if you need any help.");
+                        "Please refer to the user guide (https://jiaaaqi.github.io/ip/) if you need any help.");
                 ui.printDivider();
                 command = in.nextLine();
                 parser.setCommand(command);
@@ -50,6 +50,9 @@ public class Duke {
             switch(typeOfCommand) {
             case "list":
                 taskList.printTasks();
+                break;
+            case "help":
+                parser.help();
                 break;
             case "find":
                 taskList.find(parser.extractKeywordsFromCommand());

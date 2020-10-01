@@ -122,7 +122,6 @@ public class Parser {
         return keywords[1];
     }
 
-
     /**
      * This method checks if the input command is valid and returns the type of command as a string.
      * If invalid, "invalid" will be returned instead.
@@ -131,6 +130,8 @@ public class Parser {
      */
     public String verifyCommand() throws DukeException {
         if (command.equals("list")) {
+            return command;
+        } else if (command.equals("help")) {
             return command;
         } else if (command.contains("todo") || command.contains("event") || command.contains("deadline")) {
             return "task";
@@ -143,5 +144,14 @@ public class Parser {
         } else {
             throw new DukeException();
         }
+    }
+
+    public void help() {
+        System.out.println("     Here are some commands you can start with: ");
+        System.out.println("      list: list all tasks");
+        System.out.println("      done 2: mark 2nd task in current list as done");
+        System.out.println("      delete 4: delete 4th task in current list");
+        System.out.println("      bye: exit the app");
+        System.out.println("     For more help: https://jiaaaqi.github.io/ip/");
     }
 }
