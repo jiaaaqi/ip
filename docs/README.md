@@ -7,12 +7,13 @@ The app is to be meant used on a Command Line Interface (CLI) with Java 11 insta
 #### Table of Contents
 * [Quick start](#quick-start) 
 * [Features](#features) 
-    * [Add tasks](#add-tasks) `todo, deadline, event`
+    * [Add task](#add-task) `todo, deadline, event`
     * [Print list of tasks](#print-list-of-tasks) `list`
     * [Mark task as done](#mark-task-as-done) `done` 
     * [Delete task](#delete-task) `delete` 
     * [Save data](#save-data) 
     * [Find task using keywords](#find-task-using-keywords) `find` 
+    * [View help message](#view-help-message) `help`
     * [Exit the app](#exit-the-app) `bye`
 * [Things to note](#things-to-note)
 * [Command summary](#command-summary)
@@ -134,6 +135,22 @@ find project
     ——————————————————————————————————————————————————
 ```
 
+### View Help Message 
+Shows a message that gives location to user guide 
+and some commands to start with 
+<br>Format: `help`
+<br>Expected outcome: 
+```
+    ——————————————————————————————————————————————————
+     Here are some commands you can start with: 
+      list: list all tasks
+      done 2: mark 2nd task in current list as done
+      delete 4: delete 4th task in current list
+      bye: exit the app
+     For more help: https://jiaaaqi.github.io/ip/
+    ——————————————————————————————————————————————————
+```
+
 ### Exit the App
 Exits the program. 
 <br>Format: `bye`
@@ -149,11 +166,12 @@ Exits the program.
 
 ## Command Summary 
 Action | Format
--------|-------
-Add|todo: `todo TASKDESCRIPTION` <br>deadline: `deadline TASKDESCRIPTION /by DATE` <br>event: `event TASKDESCRIPTION /on DATE`
-Mark task as done|`done INDEX`
-Delete|`delete INDEX`
-Find tasks|`find KEYWORDS`
-List tasks|`list`
-Exit|`bye`
+------------ | -------------
+Add | todo: `todo TASKDESCRIPTION` <br>deadline: `deadline TASKDESCRIPTION /by DATE` <br>event: `event TASKDESCRIPTION /on DATE`
+Mark task as done | `done INDEX`
+Delete | `delete INDEX`
+Find tasks | `find KEYWORDS`
+List tasks | `list`
+Help | `help`
+Exit | `bye`
 
